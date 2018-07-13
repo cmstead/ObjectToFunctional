@@ -1,0 +1,1 @@
+clear; io ./test.io
