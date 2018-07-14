@@ -20,6 +20,18 @@ LinkedListNode := Object clone \
         isNodeProto := method(self == LinkedListNode)
         chooseNextNode := method(if(isNodeProto, nil, self))
 
+        isNotEmpty := method(
+            (Empty isEmpty(nodeValue)) == false
+        )
+
+        callOnNotEmpty := method(
+            actionBlock,
+
+            if(
+                isNotEmpty,
+                actionBlock call()
+            )
+        )
     )
 
 LinkedListNode init := method(
@@ -44,12 +56,8 @@ LinkedListNode tail := method(self nextNode)
 
 LinkedListNode foreach := method(
     action,
-    (
+    callOnNotEmpty(block(
         action call(head)
-
-        if(
-            tail != nil,
-            tail foreach(action)
-        )
-    )
+        tail foreach(action)
+    ))
 )

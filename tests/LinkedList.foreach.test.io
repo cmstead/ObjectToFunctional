@@ -5,7 +5,7 @@ ioTest testSuite("LinkedListNode foreach") \
         block(
             expectedValue := "First Value"
 
-            newList := LinkedList create(expectedValue)
+            newList := LinkedList create cons(expectedValue)
 
             actionSpy := SpyFactory build withArgs(list("nodeValue"))
             newList foreach(actionSpy)
@@ -28,8 +28,8 @@ ioTest testSuite("LinkedListNode foreach") \
             expectedValue2 := "Value 2"
             expectedValue3 := "Value 3"
 
-            newList := LinkedList \
-                create(expectedValue1) \
+            newList := LinkedList create\
+                cons(expectedValue1) \
                 cons(expectedValue2) \
                 cons(expectedValue3)
 

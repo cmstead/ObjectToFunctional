@@ -1,7 +1,3 @@
 LinkedList := Object clone;
 
-LinkedList create := method(
-    value,
-
-    LinkedListNode cons(value)
-)
+LinkedList create := method(LinkedListNode clone)
