@@ -1,4 +1,4 @@
-ioTest testSuite("LinkedListNode foreach") \
+ioTest testSuite("LinkedList foreach") \
     test(
         "applies action to a node in a single-node linked list",
 
