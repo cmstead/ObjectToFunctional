@@ -34,7 +34,7 @@ ioTest testSuite("LinkedList map") \
 
         block(
             originalValues := list(5, 4, 3, 2, 1)
-            currentIndex := (originalValues size) - 1
+            currentIndex := originalValues size - 1
 
             listUnderTest := LinkedList create()
 
