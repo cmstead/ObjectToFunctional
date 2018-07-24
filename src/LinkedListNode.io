@@ -1,56 +1,31 @@
 LinkedListNode := Object clone \
     do(
-        nodeValue := nil
+        valueNode := nil
         nextNode := nil
 
-        setOnUninitialized := method(
-            slotName, value,
+        getTailNode := method(
+            isNodeProto := (self == LinkedListNode)
 
-            currentValue := self getSlot(slotName)
-
-            if(
-                currentValue == nil,
-                self setSlot(slotName, value),
-                Exception raise("Cannot overwrite value in slot #{slotName}" interpolate)
-            )
-
-            return self
-        )
-
-        isNodeProto := method(self == LinkedListNode)
-        isNotEmpty := method((Empty isEmpty(nodeValue)) == false)
-        isUninitialized := method((nodeValue == nil) or (nextNode == nil))
-
-        callOnNotEmpty := method(
-            actionBlock,
-
-            if(
-                isNotEmpty,
-                actionBlock call()
+            return if(
+                isNodeProto,
+                getEmptyNode(),
+                self
             )
         )
     )
 
-LinkedListNode initializeEmpty := method(
-    setOnUninitialized("nodeValue", Empty clone)
-    setOnUninitialized("nextNode", Empty clone)
-)
+LinkedListNode isNotEmpty := method((valueNode isEmpty) == false)
 
-LinkedListNode initializeWithValues := method(
-    value, tailNode,
-
-    setOnUninitialized("nodeValue", value)
-    setOnUninitialized("nextNode", tailNode)
+LinkedListNode init := method(
+    valueNode = ValueNode clone
+    nextNode = NextNode clone
 )
 
 LinkedListNode initialize := method(
     value, tailNode,
 
-    if(
-        (value == nil) or (tailNode == nil),
-        initializeEmpty,
-        initializeWithValues(value, tailNode)
-    )
+    valueNode initialize(value)
+    nextNode initialize(tailNode)
 
     return self
 )
@@ -62,25 +37,23 @@ LinkedListNode getEmptyNode := method(
 LinkedListNode cons := method(
     value,
 
-    tailNode := self
-
-    if(
-        isNodeProto(),
-        tailNode = getEmptyNode()
-    )
+    tailNode := getTailNode()
 
     return LinkedListNode clone initialize(value, tailNode)
 )
 
-LinkedListNode head := method(self nodeValue)
-LinkedListNode tail := method(self nextNode)
+LinkedListNode head := method(self valueNode getValue)
+LinkedListNode tail := method(self nextNode getValue)
 
 LinkedListNode foreach := method(
     action,
-    callOnNotEmpty(block(
+
+    nextAction := block(
         action call(head)
         tail foreach(action)
-    ))
+    )
+
+    if(isNotEmpty, nextAction call)
 
     return self
 )
@@ -88,9 +61,16 @@ LinkedListNode foreach := method(
 LinkedListNode map := method(
     transformation,
 
+    mapAndCons := block(
+        transformedValue := transformation call(valueNode getValue)
+        tail \
+            map(transformation) \
+            cons(transformedValue)
+    )
+
     return if(
         isNotEmpty,
-        tail map(transformation) cons(transformation call(nodeValue)),
+        mapAndCons call,
         getEmptyNode()
     )
 )
