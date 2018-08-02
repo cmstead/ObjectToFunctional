@@ -12,14 +12,28 @@ LinkedListNode := Object clone \
                 self
             )
         )
+
+        headEquals := method(
+            value,
+
+            return head == value
+        )
+
+        tailEquals := method(
+            valueList,
+
+            return tail equalTo(valueList)
+        )
     )
 
-LinkedListNode isNotEmpty := method((valueNode isEmpty) == false)
 
 LinkedListNode init := method(
     valueNode = ValueNode clone
     nextNode = NextNode clone
 )
+
+LinkedListNode isEmpty := method((valueNode isEmpty) == true)
+LinkedListNode isNotEmpty := method((valueNode isEmpty) == false)
 
 LinkedListNode initialize := method(
     value, tailNode,
@@ -43,7 +57,13 @@ LinkedListNode cons := method(
 )
 
 LinkedListNode head := method(self valueNode getValue)
-LinkedListNode tail := method(self nextNode getValue)
+LinkedListNode tail := method(
+    if(
+        isNotEmpty,
+        self nextNode getValue,
+        self
+    )
+)
 
 LinkedListNode foreach := method(
     action,
@@ -73,4 +93,12 @@ LinkedListNode map := method(
         mapAndCons call,
         getEmptyNode()
     )
+)
+
+LinkedListNode equalTo := method(
+    listToCompare,
+
+    return \
+        (isEmpty and listToCompare isEmpty) or \
+        (tailEquals(listToCompare tail) and headEquals(listToCompare head))
 )

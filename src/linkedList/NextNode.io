@@ -1,3 +1,3 @@
-NextNode := BaseNode clone do(
+NextNode := BaseValueNode clone do(
     setExceptionMessage("Cannot overwrite next node")
 )

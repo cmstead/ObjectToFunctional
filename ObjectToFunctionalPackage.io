@@ -12,6 +12,7 @@ ObjectToFunctionalPackage init := method(
     prodConfig(block(
         moduleLoader \
             addSearchPath("src") \
+            addSearchPath("src/linkedList") \
             configure()
     ))
 
